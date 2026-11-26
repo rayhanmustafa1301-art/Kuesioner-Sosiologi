@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kuesioner Kepo &amp; Share di Era Global</title>
+<meta name="description" content="Survei singkat tentang globalisasi dan kebiasaan bermedia sosial.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#060a18">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230c1330'/%3E%3Crect x='12' y='16' width='40' height='32' rx='10' fill='%234de3ff'/%3E%3Ccircle cx='24' cy='32' r='4' fill='%230c1330'/%3E%3Ccircle cx='40' cy='32' r='4' fill='%230c1330'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#060a18; --panel:#0f1736; --panel2:#152049; --line:#2f4190; --line-soft:#212f68;
+  --text:#eef3ff; --muted:#aab8ea;
+  --cyan:#4de3ff; --violet:#a98bff; --pink:#ff7ad9; --mint:#5dffb0; --amber:#ffd24d; --red:#ff6b78;
+  --face:#4de3ff; --lvl:#ff6b78;
+  --font:"Trebuchet MS","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100vh;min-height:100dvh;color:var(--text);font:16px/1.5 var(--font);
+  background:
+    radial-gradient(600px 380px at 85% -5%,rgba(169,139,255,.22),transparent 70%),
+    radial-gradient(560px 380px at 5% 105%,rgba(77,227,255,.18),transparent 70%),
+    var(--bg);
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(77,227,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(77,227,255,.07) 1px,transparent 1px);
+  background-size:34px 34px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 35%,#000 15%,transparent 78%);
+          mask-image:radial-gradient(ellipse at 50% 35%,#000 15%,transparent 78%);
+  animation:gridmove 24s linear infinite;
+}
+@keyframes gridmove{to{background-position:34px 34px,34px 34px}}
+
+.sr-only{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.trap{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+h1:focus,h2:focus{outline:none}
+
+/* ---------- Perangkat / gadget ---------- */
+.app{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;
+  padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+.device{width:100%;max-width:520px;border-radius:30px;padding:10px;
+  background:linear-gradient(145deg,#2b3b86,#0e1636 45%,#1d2d6d);
+  box-shadow:0 0 0 1px rgba(77,227,255,.28),0 24px 60px rgba(0,0,0,.55),0 0 70px rgba(77,227,255,.12)}
+.frame{position:relative;border-radius:22px;background:var(--panel);overflow:hidden;border:1px solid var(--line-soft)}
+.frame::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+
+/* ---------- Status bar + baterai ---------- */
+.statusbar{display:flex;align-items:center;gap:12px;padding:12px 16px 10px;border-bottom:1px solid var(--line-soft);
+  background:linear-gradient(180deg,rgba(77,227,255,.07),transparent)}
+.brand{display:flex;align-items:center;gap:7px;font:700 11px/1 var(--mono);letter-spacing:.14em;color:var(--cyan);white-space:nowrap}
+.brand i{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint);animation:dot 2.2s ease-in-out infinite}
+@keyframes dot{50%{opacity:.35}}
+.battery-wrap{flex:1;display:flex;align-items:center;min-width:0}
+.battery{position:relative;flex:1;height:26px;padding:3px;border:2px solid #8497de;border-radius:8px;background:#0a1127}
+.battery .fill{height:100%;width:0;border-radius:4px;background:var(--lvl);box-shadow:0 0 12px var(--lvl);
+  transition:width .55s cubic-bezier(.3,.9,.3,1),background-color .55s,box-shadow .55s}
+.battery .cells{position:absolute;inset:3px;border-radius:4px;pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent 0,transparent calc(100% / 11 - 2px),#0a1127 calc(100% / 11 - 2px),#0a1127 calc(100% / 11))}
+.nub{width:5px;height:12px;margin-left:2px;border-radius:0 3px 3px 0;background:#8497de}
+.count{min-width:3.3em;text-align:right;font:700 14px/1 var(--mono);color:var(--text)}
+
+/* ---------- Robot ---------- */
+.robot-row{display:flex;align-items:center;gap:12px;padding:14px 16px 0}
+.robot-box{flex:0 0 auto;width:104px;height:104px}
+.robot{display:block;width:100%;height:100%;overflow:visible;--face:#4de3ff}
+.robot[data-mood="sad"]{--face:#7fb0ff}
+.robot[data-mood="worried"]{--face:#ffb35c}
+.robot[data-mood="neutral"]{--face:#4de3ff}
+.robot[data-mood="happy"]{--face:#5dffb0}
+.robot[data-mood="wow"]{--face:#ff7ad9}
+.robot .face{opacity:0;transition:opacity .18s}
+.robot[data-mood="sad"] .f-sad,.robot[data-mood="worried"] .f-worried,.robot[data-mood="neutral"] .f-neutral,
+.robot[data-mood="happy"] .f-happy,.robot[data-mood="wow"] .f-wow{opacity:1}
+.robot .e{fill:var(--face)}
+.robot .m{fill:none;stroke:var(--face);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.robot .m.solid{fill:var(--face)}
+.robot .hl{fill:#fff;opacity:.9}
+.robot .screen-edge{stroke:var(--face)}
+.robot .bulb,.robot .chest{fill:var(--face)}
+.robot .float{animation:bob 3.4s ease-in-out infinite}
+.robot .shadow{transform-box:fill-box;transform-origin:center;animation:shadow 3.4s ease-in-out infinite}
+.robot .antenna{transform-origin:100px 42px;animation:wiggle 3.6s ease-in-out infinite}
+.robot .bulb{animation:pulse 1.8s ease-in-out infinite}
+.robot .chest{animation:pulse 2.4s ease-in-out infinite}
+.robot .blink{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
+.robot .look{animation:look 8s ease-in-out infinite}
+.robot .headg{transform-origin:100px 132px;transition:transform .3s}
+.robot[data-mood="sad"] .headg{transform:translateY(3px) rotate(-3deg)}
+.robot[data-mood="worried"] .headg{transform:rotate(3deg)}
+.robot[data-mood="happy"] .headg{transform:rotate(-2deg)}
+.robot .arm{transition:transform .3s}
+.robot .arm-l{transform-origin:52px 144px}
+.robot .arm-r{transform-origin:148px 144px}
+.robot[data-mood="sad"] .arm-l{transform:rotate(-8deg)}
+.robot[data-mood="sad"] .arm-r{transform:rotate(8deg)}
+.robot[data-mood="happy"] .arm-l{transform:rotate(28deg)}
+.robot[data-mood="happy"] .arm-r{transform:rotate(-28deg)}
+.robot[data-mood="wow"] .arm-l{transform:rotate(62deg)}
+.robot[data-mood="wow"] .arm-r{transform:rotate(-62deg)}
+.robot[data-wave] .arm-r{transform:rotate(-140deg);animation:wave .7s ease-in-out infinite alternate}
+.robot .tear{animation:tear 2.2s ease-in infinite}
+.robot .sweat{animation:tear 2.8s ease-in infinite}
+.robot .spark{transform-box:fill-box;transform-origin:center;animation:twinkle 1.2s ease-in-out infinite}
+.robot .spark.b{animation-delay:.4s}
+.robot.pop{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+.robot.pop[data-mood="sad"],.robot.pop[data-mood="worried"]{animation:droop .6s ease-out}
+.robot.pop[data-mood="wow"]{animation:jump .6s ease-out}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes shadow{50%{transform:scale(.86);opacity:.7}}
+@keyframes wiggle{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes pulse{50%{opacity:.45}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes look{0%,35%,100%{transform:translateX(0)}45%,60%{transform:translateX(-4px)}70%,85%{transform:translateX(4px)}}
+@keyframes wave{from{transform:rotate(-125deg)}to{transform:rotate(-160deg)}}
+@keyframes tear{0%{transform:translateY(0);opacity:0}15%{opacity:1}80%{transform:translateY(9px);opacity:0}100%{opacity:0}}
+@keyframes twinkle{50%{transform:scale(.4);opacity:.4}}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes droop{0%{transform:translateY(-4px)}40%{transform:translateY(5px)}100%{transform:translateY(0)}}
+@keyframes jump{0%{transform:translateY(0)}35%{transform:translateY(-14px) scale(1.05)}70%{transform:translateY(0)}85%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+
+.bubble{position:relative;flex:1;min-height:50px;display:flex;align-items:center;padding:10px 14px;
+  background:var(--panel2);border:1.5px solid var(--line);border-radius:16px;font-size:15px;line-height:1.35}
+.bubble::before{content:"";position:absolute;left:-8px;top:50%;width:14px;height:14px;background:var(--panel2);
+  border-left:1.5px solid var(--line);border-bottom:1.5px solid var(--line);transform:translateY(-50%) rotate(45deg)}
+.bubble span{animation:say .3s ease-out}
+@keyframes say{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- Layar & transisi ---------- */
+.stage{position:relative}
+.screen{padding:18px 18px 24px}
+.screen[hidden]{display:none!important}
+.in-right{animation:inRight .34s cubic-bezier(.2,.8,.2,1) both}
+.in-left{animation:inLeft .34s cubic-bezier(.2,.8,.2,1) both}
+.out-left{animation:outLeft .18s ease-in both}
+.out-right{animation:outRight .18s ease-in both}
+@keyframes inRight{from{opacity:0;transform:translateX(34px)}to{opacity:1;transform:none}}
+@keyframes inLeft{from{opacity:0;transform:translateX(-34px)}to{opacity:1;transform:none}}
+@keyframes outLeft{to{opacity:0;transform:translateX(-34px)}}
+@keyframes outRight{to{opacity:0;transform:translateX(34px)}}
+
+.eyebrow{margin:0 0 6px;font:700 12px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--violet)}
+h1{margin:.1em 0 .45em;font-size:clamp(29px,8.4vw,42px);line-height:1.08;letter-spacing:-.01em;text-shadow:0 0 22px rgba(77,227,255,.4)}
+h1 em{font-style:normal;color:var(--cyan)}
+h2{margin:.3em 0 1em;font-size:clamp(19px,5.2vw,23px);line-height:1.3}
+.lead{margin:0 0 16px;color:var(--muted)}
+.chip{display:inline-block;margin:0 0 4px;padding:3px 11px;border:1px solid var(--cyan);border-radius:999px;font:600 12px/1.5 var(--mono);color:var(--cyan)}
+.privacy{margin:0 0 20px;padding:12px 14px;border:1.5px dashed var(--line);border-radius:14px;background:rgba(77,227,255,.05);font-size:14.5px;color:var(--text)}
+.privacy strong{display:block;margin-bottom:2px;font:700 12px var(--mono);letter-spacing:.1em;color:var(--mint);text-transform:uppercase}
+
+/* ---------- Form ---------- */
+.field{margin:0 0 16px}
+.lbl-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px}
+.lbl{font-weight:700}
+.req{margin-left:6px;padding:1px 8px;border:1px solid var(--amber);border-radius:999px;font:600 11px var(--mono);color:var(--amber);vertical-align:middle}
+.opt{font-weight:400;color:var(--muted)}
+.hint{margin:6px 0 0;font-size:13.5px;color:var(--muted)}
+.counter{font:12px var(--mono);color:var(--muted)}
+.counter.warn{color:var(--amber)}
+input[type=text],input[type=date],textarea{
+  width:100%;min-height:50px;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;
+  background:#0a1230;color:var(--text);font:inherit;font-size:16px;color-scheme:dark;-webkit-appearance:none;appearance:none}
+textarea{min-height:88px;resize:vertical;line-height:1.45}
+input::placeholder,textarea::placeholder{color:#8393c9}
+input:focus,textarea:focus{border-color:var(--cyan)}
+input[aria-invalid="true"]{border-color:var(--red)}
+.err{margin:6px 0 0;min-height:0;font-size:14px;color:#ff9aa4}
+.err:empty{display:none}
+.err::before{content:"! ";font-weight:800}
+
+/* ---------- Pilihan jawaban ---------- */
+.choices{display:grid;gap:9px;margin:0 0 4px}
+.choice{position:relative;display:block;--c:#4de3ff}
+.choice[data-i="1"]{--c:#7fb0ff}
+.choice[data-i="2"]{--c:#ffb35c}
+.choice[data-i="3"]{--c:#4de3ff}
+.choice[data-i="4"]{--c:#5dffb0}
+.choice[data-i="5"]{--c:#ff7ad9}
+.choice input{position:absolute;inset:0;z-index:1;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.card{display:flex;align-items:center;gap:12px;min-height:52px;padding:10px 14px;border:1.5px solid var(--line);border-radius:14px;
+  background:var(--panel2);transition:transform .15s,border-color .15s,background .15s,box-shadow .15s}
+.choice:hover .card{border-color:var(--c);transform:translateY(-1px)}
+.badge{flex:0 0 auto;display:grid;place-items:center;width:30px;height:30px;border:1.5px solid var(--c);border-radius:50%;font:700 14px var(--mono);color:var(--c)}
+.ctext{flex:1;font-weight:600;line-height:1.3}
+.tick{position:relative;flex:0 0 auto;width:22px;height:22px;border:1.5px solid var(--line);border-radius:50%}
+.tick::after{content:"";position:absolute;left:6px;top:2px;width:6px;height:12px;border:solid #04101f;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);opacity:0}
+.choice input:checked + .card{border-color:var(--c);background:var(--panel2);background:color-mix(in srgb,var(--c) 15%,var(--panel2));
+  box-shadow:0 0 0 1px var(--c),0 0 20px rgba(255,255,255,.06)}
+.choice input:checked + .card .badge{background:var(--c);color:#04101f}
+.choice input:checked + .card .tick{background:var(--c);border-color:var(--c)}
+.choice input:checked + .card .tick::after{opacity:1}
+.choice input:focus-visible + .card{outline:3px solid var(--cyan);outline-offset:3px}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.reason{margin-top:18px}
+
+/* ---------- Tombol ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border:1.5px solid transparent;border-radius:14px;
+  font:inherit;font-weight:700;color:var(--text);background:none;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s,border-color .15s}
+.btn.primary{background:linear-gradient(135deg,var(--cyan),#7ab8ff);color:#031022;box-shadow:0 6px 22px rgba(77,227,255,.28)}
+.btn.primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 28px rgba(77,227,255,.42)}
+.btn.ghost{border-color:var(--line);background:rgba(255,255,255,.03)}
+.btn.ghost:hover:not(:disabled){border-color:var(--cyan)}
+.btn.skip{border:1.5px dashed var(--line);color:var(--muted)}
+.btn.skip:hover:not(:disabled){border-color:var(--cyan);color:var(--text)}
+.btn.big{width:100%;min-height:54px;font-size:17px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.actions .primary{grid-column:1/-1}
+.actions .btn:not(.primary){padding:0 10px;white-space:nowrap}
+#send-actions{grid-template-columns:1fr}
+
+/* ---------- Kirim ---------- */
+.loader{width:52px;height:52px;margin:6px auto 18px;border:5px solid rgba(77,227,255,.2);border-top-color:var(--cyan);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.center{text-align:center}
+.alert{margin:0 0 16px;padding:12px 14px;border:1.5px solid var(--red);border-radius:14px;background:rgba(255,107,120,.1)}
+
+/* ---------- Konfeti ---------- */
+.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:3}
+.confetti i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(900px) rotate(720deg);opacity:.9}}
+
+@media (max-width:380px){
+  .robot-box{width:88px;height:88px}
+  .screen{padding:16px 14px 22px}
+  .brand span{display:none}
+}
+@media (min-width:600px){
+  .device{padding:14px;border-radius:36px}
+  .frame{border-radius:26px}
+  .robot-box{width:128px;height:128px}
+  .screen{padding:22px 28px 30px}
+  .robot-row{padding:18px 28px 0}
+  .statusbar{padding:14px 28px 12px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<noscript><p style="padding:24px;color:#fff">Kuesioner ini butuh JavaScript supaya bisa jalan. Aktifkan dulu ya.</p></noscript>
+
+<div class="app">
+<div class="device">
+<div class="frame" id="frame">
+
+  <header class="statusbar">
+    <span class="brand" aria-hidden="true"><i></i><span>BITO·OS</span></span>
+    <div class="battery-wrap" id="battery" role="progressbar" aria-label="Kemajuan kuesioner" aria-valuemin="0" aria-valuemax="11" aria-valuenow="0" aria-valuetext="Belum mulai">
+      <div class="battery"><div class="fill" id="fill"></div><div class="cells" aria-hidden="true"></div></div>
+      <span class="nub" aria-hidden="true"></span>
+    </div>
+    <span class="count" id="count" aria-hidden="true">0/10</span>
+  </header>
+
+  <div class="robot-row">
+    <div class="robot-box">
+      <svg class="robot" id="robot" data-mood="happy" data-wave viewBox="0 0 200 200" role="img" aria-label="Bito, maskot robot yang ekspresinya berubah mengikuti jawabanmu" focusable="false">
+        <defs>
+          <linearGradient id="gHead" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a63c9"/><stop offset="1" stop-color="#1c2870"/></linearGradient>
+          <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a50b5"/><stop offset="1" stop-color="#18235f"/></linearGradient>
+          <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <ellipse class="shadow" cx="100" cy="193" rx="46" ry="6" fill="#000" opacity=".4"/>
+        <g class="float">
+          <g class="arm arm-l"><rect x="44" y="142" width="15" height="34" rx="7.5" fill="url(#gBody)" stroke="#7d93f0" stroke-opacity=".6" stroke-width="1.5"/></g>
+          <g class="arm arm-r"><rect x="141" y="142" width="15" height="34" rx="7.5" fill="url(#gBody)" stroke="#7d93f0" stroke-opacity=".6" stroke-width="1.5"/></g>
+          <rect x="72" y="176" width="22" height="12" rx="6" fill="#2c3d95"/>
+          <rect x="106" y="176" width="22" height="12" rx="6" fill="#2c3d95"/>
+          <rect x="62" y="134" width="76" height="46" rx="16" fill="url(#gBody)" stroke="#7d93f0" stroke-width="2"/>
+          <rect x="82" y="145" width="36" height="24" rx="9" fill="#0a1230"/>
+          <circle class="chest" cx="100" cy="157" r="5.5"/>
+          <circle cx="90" cy="157" r="2" fill="#5b6fc7"/><circle cx="110" cy="157" r="2" fill="#5b6fc7"/>
+
+          <g class="headg">
+            <g class="antenna"><line x1="100" y1="42" x2="100" y2="25" stroke="#7d93f0" stroke-width="4" stroke-linecap="round"/><circle class="bulb" cx="100" cy="19" r="7"/></g>
+            <rect x="29" y="70" width="13" height="32" rx="6.5" fill="#2c3d95" stroke="#7d93f0" stroke-opacity=".6" stroke-width="1.5"/>
+            <rect x="158" y="70" width="13" height="32" rx="6.5" fill="#2c3d95" stroke="#7d93f0" stroke-opacity=".6" stroke-width="1.5"/>
+            <rect x="40" y="40" width="120" height="92" rx="30" fill="url(#gHead)" stroke="#7d93f0" stroke-width="2"/>
+            <path d="M56 51 Q70 43 90 45" stroke="#fff" stroke-opacity=".28" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <rect class="screen-edge" x="52" y="52" width="96" height="68" rx="20" fill="#060d24" stroke-opacity=".55" stroke-width="2"/>
+
+            <!-- netral / idle -->
+            <g class="face f-neutral" filter="url(#glow)">
+              <g class="look"><g class="blink"><ellipse class="e" cx="80" cy="84" rx="8" ry="10"/><ellipse class="e" cx="120" cy="84" rx="8" ry="10"/></g></g>
+              <path class="m" d="M90 105 H110"/>
+            </g>
+            <!-- sedih -->
+            <g class="face f-sad" filter="url(#glow)">
+              <path class="m" stroke-width="4" d="M68 75 L92 66"/><path class="m" stroke-width="4" d="M108 66 L132 75"/>
+              <g class="blink"><ellipse class="e" cx="80" cy="88" rx="7.5" ry="9"/><ellipse class="e" cx="120" cy="88" rx="7.5" ry="9"/></g>
+              <circle class="hl" cx="77" cy="84" r="2.4"/><circle class="hl" cx="117" cy="84" r="2.4"/>
+              <path class="m" d="M86 111 Q100 98 114 111"/>
+              <path class="tear" d="M71 99 C67 105 66 109 71 112 C76 109 75 105 71 99Z" fill="#a9dcff" stroke="none"/>
+            </g>
+            <!-- khawatir -->
+            <g class="face f-worried" filter="url(#glow)">
+              <path class="m" stroke-width="4" d="M68 73 L92 67"/><path class="m" stroke-width="4" d="M108 67 L132 73"/>
+              <g class="blink"><ellipse class="e" cx="80" cy="86" rx="7.5" ry="9.5"/><ellipse class="e" cx="120" cy="86" rx="7.5" ry="9.5"/></g>
+              <circle class="hl" cx="82" cy="82" r="2.4"/><circle class="hl" cx="122" cy="82" r="2.4"/>
+              <path class="m" stroke-width="4.5" d="M82 109 q6 -7 12 0 t12 0 t12 0"/>
+              <path class="sweat" d="M138 58 C133 66 132 71 138 74 C144 71 143 66 138 58Z" fill="#a9dcff" stroke="none"/>
+            </g>
+            <!-- senang -->
+            <g class="face f-happy" filter="url(#glow)">
+              <path class="m" d="M67 90 Q80 70 93 90"/><path class="m" d="M107 90 Q120 70 133 90"/>
+              <path class="m solid" stroke-width="4" d="M84 100 Q100 120 116 100 Z"/>
+              <circle cx="66" cy="102" r="6" fill="#ff7ad9" opacity=".55"/><circle cx="134" cy="102" r="6" fill="#ff7ad9" opacity=".55"/>
+            </g>
+            <!-- kaget / heboh -->
+            <g class="face f-wow" filter="url(#glow)">
+              <path class="m" stroke-width="4" d="M68 64 Q80 57 92 64"/><path class="m" stroke-width="4" d="M108 64 Q120 57 132 64"/>
+              <circle class="e" cx="80" cy="84" r="12"/><circle cx="80" cy="84" r="5" fill="#060d24"/><circle class="hl" cx="85" cy="79" r="2.6"/>
+              <circle class="e" cx="120" cy="84" r="12"/><circle cx="120" cy="84" r="5" fill="#060d24"/><circle class="hl" cx="125" cy="79" r="2.6"/>
+              <ellipse cx="100" cy="108" rx="8" ry="9" fill="#060d24" stroke="var(--face)" stroke-width="4"/>
+              <path class="spark" d="M26 46 l2.5 7 7 2.5 -7 2.5 -2.5 7 -2.5 -7 -7 -2.5 7 -2.5z" fill="#ffe27a"/>
+              <path class="spark b" d="M176 40 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" fill="#ffe27a"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="bubble" aria-hidden="true"><span id="bubble">Halo, aku Bito! Yuk isi survei bareng-bareng.</span></div>
+  </div>
+
+  <main class="stage" id="stage">
+
+    <!-- 0. Sambutan -->
+    <section class="screen" id="s-welcome" aria-labelledby="h-welcome">
+      <p class="eyebrow">Survei singkat · 10 pertanyaan</p>
+      <h1 id="h-welcome" tabindex="-1">Kepo &amp; Share<br><em>di Era Global</em></h1>
+      <p class="lead">Halo! Aku Bito, robot yang bakal nemenin kamu ngisi survei soal globalisasi dan kebiasaan bermedia sosial. Santai aja, nggak ada jawaban benar atau salah. Sekitar 5 menit kelar kok.</p>
+      <p class="privacy" role="note"><strong>Catatan privasi</strong>Data diri dan jawabanmu hanya dipakai untuk keperluan survei ini.</p>
+      <button type="button" class="btn primary big" id="btn-start">Mulai</button>
+    </section>
+
+    <!-- 1. Data diri -->
+    <section class="screen" id="s-profile" aria-labelledby="h-profile" hidden>
+      <p class="eyebrow">Section 1 · Data diri</p>
+      <h2 id="h-profile" tabindex="-1">Kenalan dulu, yuk!</h2>
+      <form id="form-profile" novalidate>
+        <div class="field">
+          <div class="lbl-row"><label class="lbl" for="nama">Nama lengkap<span class="req">wajib</span></label></div>
+          <input type="text" id="nama" name="nama" autocomplete="name" autocapitalize="words" maxlength="100" required aria-required="true" aria-describedby="err-nama">
+          <p class="err" id="err-nama" role="alert"></p>
+        </div>
+        <div class="field">
+          <div class="lbl-row"><label class="lbl" for="lahir">Tanggal lahir<span class="req">wajib</span></label></div>
+          <input type="date" id="lahir" name="tanggal_lahir" autocomplete="bday" min="1900-01-01" placeholder="YYYY-MM-DD" required aria-required="true" aria-describedby="hint-lahir err-lahir">
+          <p class="hint" id="hint-lahir">Pilih dari kalender atau ketik langsung.</p>
+          <p class="err" id="err-lahir" role="alert"></p>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn primary" id="p-next">Lanjut</button>
+          <button type="button" class="btn ghost" id="p-back">Kembali</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 2. Pertanyaan (dipakai ulang untuk 10 pertanyaan) -->
+    <section class="screen" id="s-q" aria-labelledby="h-q" hidden>
+      <p class="eyebrow" id="q-eyebrow">Section 2 · Survei</p>
+      <span class="chip" id="q-scale"></span>
+      <h2 id="h-q" tabindex="-1"></h2>
+      <form id="form-q" novalidate>
+        <div class="choices" id="choices" role="radiogroup" aria-labelledby="h-q" aria-describedby="err-q"></div>
+        <p class="err" id="err-q" role="alert"></p>
+        <div class="field reason">
+          <div class="lbl-row">
+            <label class="lbl" for="alasan">Alasan <span class="opt">(opsional)</span></label>
+            <span class="counter" id="alasan-count">0/300</span>
+          </div>
+          <textarea id="alasan" name="alasan" maxlength="300" rows="3" autocomplete="off" placeholder="Ceritain singkat kenapa kamu milih itu…"></textarea>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn primary" id="q-next">Lanjut</button>
+          <button type="button" class="btn ghost" id="q-back">Kembali</button>
+          <button type="button" class="btn skip" id="q-skip">Lewati alasan</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 3. Mengirim / gagal -->
+    <section class="screen center" id="s-send" aria-labelledby="h-send" hidden>
+      <p class="eyebrow" id="send-eyebrow">Mengirim…</p>
+      <h2 id="h-send" tabindex="-1">Lagi ngirim jawabanmu…</h2>
+      <div class="loader" id="loader" aria-hidden="true"></div>
+      <p class="lead" id="send-msg" role="status" aria-live="polite">Tunggu sebentar ya, jangan ditutup dulu.</p>
+      <div class="actions" id="send-actions" hidden>
+        <button type="button" class="btn primary" id="btn-retry">Coba lagi</button>
+        <button type="button" class="btn ghost" id="btn-review">Cek jawaban lagi</button>
+      </div>
+    </section>
+
+    <!-- 4. Terima kasih -->
+    <section class="screen center" id="s-thanks" aria-labelledby="h-thanks" hidden>
+      <p class="eyebrow">Selesai · Baterai penuh</p>
+      <h2 id="h-thanks" tabindex="-1">Makasih banyak!</h2>
+      <p class="lead" id="thanks-msg">Jawabanmu sudah masuk. Kontribusimu bikin survei ini jadi lebih lengkap. Sekarang kamu boleh menutup halaman ini.</p>
+    </section>
+
+  </main>
+</div>
+</div>
+</div>
+
+<!-- Honeypot: biarkan kosong. Dipakai Formspree untuk menyaring bot. -->
+<div class="trap" aria-hidden="true">
+  <label>Jangan diisi<input type="text" id="gotcha" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ====== DATA (diambil dari file Word "Skala frekuensi") ====== */
+var DATA = {
+ "scales": {
+  "frekuensi": {
+   "label": "Skala frekuensi",
+   "options": [
+    "Tidak Pernah",
+    "Jarang",
+    "Biasa",
+    "Sering",
+    "Selalu"
+   ]
+  },
+  "persetujuan": {
+   "label": "Skala persetujuan",
+   "options": [
+    "Sangat Tidak Setuju",
+    "Tidak Setuju",
+    "Netral",
+    "Setuju",
+    "Sangat Setuju"
+   ]
+  },
+  "kenyamanan": {
+   "label": "Skala kenyamanan",
+   "options": [
+    "Sangat Tidak Nyaman",
+    "Tidak Nyaman",
+    "Netral",
+    "Nyaman",
+    "Sangat Nyaman"
+   ]
+  },
+  "kepentingan": {
+   "label": "Skala kepentingan",
+   "options": [
+    "Sangat Tidak Penting",
+    "Tidak Penting",
+    "Cukup Penting",
+    "Penting",
+    "Sangat Penting"
+   ]
+  },
+  "dampak": {
+   "label": "Skala dampak",
+   "options": [
+    "Tidak Berdampak",
+    "Sedikit Berdampak",
+    "Cukup Berdampak",
+    "Berdampak",
+    "Sangat Berdampak"
+   ]
+  },
+  "kemungkinan": {
+   "label": "Skala kemungkinan",
+   "options": [
+    "Sangat Tidak Mungkin",
+    "Tidak Mungkin",
+    "Mungkin",
+    "Sangat Mungkin",
+    "Pasti"
+   ]
+  },
+  "kesadaran": {
+   "label": "Skala kesadaran",
+   "options": [
+    "Sangat Tidak Sadar",
+    "Kurang Sadar",
+    "Cukup Sadar",
+    "Sadar",
+    "Sangat Sadar"
+   ]
+  }
+ },
+ "questions": [
+  {
+   "scale": "frekuensi",
+   "text": "Seberapa sering kamu memantau kabar atau aktivitas seseorang lewat media sosial (Instagram, TikTok, dll.) tanpa menghubunginya secara langsung?"
+  },
+  {
+   "scale": "frekuensi",
+   "text": "Seberapa sering kamu membagikan hal-hal pribadi (lokasi, kegiatan harian, masalah pribadi) di media sosial karena terpengaruh tren global?"
+  },
+  {
+   "scale": "frekuensi",
+   "text": "Seberapa sering kamu mengintip profil, unggahan lama, atau daftar pertemanan orang lain secara diam-diam (stalking/kepo) padahal tidak ada keperluan khusus?"
+  },
+  {
+   "scale": "persetujuan",
+   "text": "Menurut saya, mengintip kehidupan orang lain di media sosial (stalking) adalah hal yang wajar karena semua orang sudah terbiasa membagikan keseharian secara terbuka (oversharing)."
+  },
+  {
+   "scale": "persetujuan",
+   "text": "Menurut saya, masyarakat di sekitar saya belum memiliki kesadaran yang cukup tentang batas privasi digital, sehingga fitur canggih media sosial (pelacakan lokasi, aktivitas, lingkaran pertemanan) sering disalahgunakan."
+  },
+  {
+   "scale": "kenyamanan",
+   "text": "Seberapa nyaman kamu jika orang yang tidak terlalu dekat mengetahui lokasi, aktivitas, atau lingkaran pertemananmu lewat media sosial?"
+  },
+  {
+   "scale": "kepentingan",
+   "text": "Seberapa penting menurutmu adanya aturan atau etika yang jelas untuk membatasi perilaku stalking dan penyalahgunaan data pribadi di media sosial?"
+  },
+  {
+   "scale": "dampak",
+   "text": "Seberapa besar pengaruh tren global (challenge, konten \"day in my life\", dll.) terhadap kebiasaanmu membagikan kehidupan pribadi di media sosial?"
+  },
+  {
+   "scale": "kemungkinan",
+   "text": "Seberapa mungkin kamu membatasi akun (private/close friends) atau menahan diri dari mengunggah sesuatu karena khawatir diawasi orang lain?"
+  },
+  {
+   "scale": "kesadaran",
+   "text": "Seberapa sadar kamu bahwa mengintip kehidupan orang lain di media sosial (stalking) bisa dianggap pelanggaran privasi yang serius di banyak negara?"
+  }
+ ]
+};
+var ENDPOINT = 'https://formspree.io/f/xljbzkdw';
+var TOTAL = DATA.questions.length;      // 10
+var STEPS = TOTAL + 1;                  // data diri + pertanyaan = 11
+var REASON_MAX = 300;
+
+var MOODS = [null,'sad','worried','neutral','happy','wow'];
+var REACT = [null,
+  'Hiks… oke, dicatat.',
+  'Hmm, agak khawatir ya…',
+  'Oke, netral. Dicatat!',
+  'Wah, asyik!',
+  'Wow, serius?!'];
+var IDLE = [
+  'Pilih satu yang paling pas buat kamu ya.',
+  'Nggak ada jawaban salah, kok.',
+  'Santai aja, jawab jujur ya.',
+  'Aku nunggu jawabanmu nih…',
+  'Tinggal tap salah satu pilihan.',
+  'Hampir separuh jalan, semangat!'
+];
+
+var $ = function(s){ return document.querySelector(s); };
+var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+var screens = {welcome:$('#s-welcome'), profile:$('#s-profile'), q:$('#s-q'), send:$('#s-send'), thanks:$('#s-thanks')};
+var robot = $('#robot'), bubbleEl = $('#bubble');
+
+/* ====== STATE (hanya di memori, tidak pakai localStorage) ====== */
+var state = {
+  nama:'', lahir:'', qi:0, sending:false, submitted:false,
+  answers: DATA.questions.map(function(){ return {idx:0, label:'', reason:''}; })
+};
+var current = 'welcome', busy = false, queue = [];
+
+/* ====== ROBOT ====== */
+function say(text){
+  if(!text) return;
+  bubbleEl.textContent = text;
+  if(!mq.matches){ bubbleEl.style.animation='none'; void bubbleEl.offsetWidth; bubbleEl.style.animation=''; }
+}
+function mood(name, text){
+  robot.setAttribute('data-mood', name);
+  say(text);
+  if(!mq.matches){ robot.classList.remove('pop'); void robot.getBoundingClientRect(); robot.classList.add('pop'); }
+}
+
+/* ====== PROGRESS BATERAI ====== */
+function updateProgress(){
+  var done=0, n=0, text='Belum mulai';
+  if(current==='profile'){ text='Data diri'; }
+  else if(current==='q'){ done=state.qi+1; n=state.qi+1; text='Pertanyaan '+n+' dari '+TOTAL; }
+  else if(current==='send'){ done=STEPS-1; n=TOTAL; text='Mengirim jawaban'; }
+  else if(current==='thanks'){ done=STEPS; n=TOTAL; text='Selesai'; }
+  var p = done/STEPS;
+  var hue = Math.round(p*128);                       // merah(0) → kuning(~60) → hijau(128)
+  var col = 'hsl('+hue+' 92% 58%)';
+  $('#battery').style.setProperty('--lvl', col);
+  $('#fill').style.width = (p*100)+'%';
+  $('.battery').style.setProperty('--lvl', col);
+  $('#fill').style.setProperty('--lvl', col);
+  $('#count').textContent = n+'/'+TOTAL;
+  var b = $('#battery');
+  b.setAttribute('aria-valuenow', done);
+  b.setAttribute('aria-valuetext', text);
+}
+
+/* ====== NAVIGASI ANTAR LAYAR ====== */
+function go(name, dir, prepare){
+  if(busy){ queue.push([name,dir,prepare]); return; }
+  busy = true;
+  var from = screens[current], to = screens[name], reduce = mq.matches;
+  function swap(){
+    from.hidden = true;
+    from.classList.remove('out-left','out-right');
+    current = name;
+    if(prepare){ try{ prepare(); }catch(err){ if(window.console) console.error(err); } }
+    if(name==='welcome' || name==='thanks') robot.setAttribute('data-wave',''); else robot.removeAttribute('data-wave');
+    updateProgress();
+    to.classList.remove('in-left','in-right','out-left','out-right');
+    to.hidden = false;
+    window.scrollTo(0,0);
+    if(!reduce) to.classList.add(dir>0 ? 'in-right' : 'in-left');
+    var h = to.querySelector('h1,h2'); if(h) h.focus({preventScroll:true});
+    setTimeout(function(){
+      to.classList.remove('in-right','in-left');
+      busy = false;
+      if(queue.length){ var a = queue.shift(); go(a[0],a[1],a[2]); }
+    }, reduce ? 0 : 340);
+  }
+  if(reduce || from.hidden){ swap(); }
+  else { from.classList.add(dir>0 ? 'out-left' : 'out-right'); setTimeout(swap, 180); }
+}
+
+/* ====== LAYAR 1: DATA DIRI ====== */
+function pad(n){ return (n<10?'0':'')+n; }
+(function setMaxDate(){
+  var t = new Date();
+  $('#lahir').max = t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
+})();
+
+function validateName(v){
+  var s = v.trim().replace(/\s+/g,' ');
+  if(!s) return 'Nama lengkapnya diisi dulu ya.';
+  if(s.length < 2) return 'Namanya kependekan nih. Tulis nama lengkapmu ya.';
+  if(!/[A-Za-zÀ-ɏͰ-῿぀-￿]/.test(s)) return 'Namanya harus ada hurufnya ya.';
+  return '';
+}
+function validateDate(v){
+  if(!v) return 'Tanggal lahirnya diisi dulu ya.';
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+  if(!m) return 'Format tanggalnya belum pas. Pakai kalender, atau tulis seperti 2004-08-17.';
+  var y=+m[1], mo=+m[2], d=+m[3], dt=new Date(Date.UTC(y,mo-1,d));
+  if(dt.getUTCFullYear()!==y || dt.getUTCMonth()!==mo-1 || dt.getUTCDate()!==d) return 'Tanggal itu nggak ada di kalender. Cek lagi ya.';
+  var t = new Date();
+  if(dt.getTime() > Date.UTC(t.getFullYear(),t.getMonth(),t.getDate())) return 'Tanggal lahir nggak boleh di masa depan.';
+  if(y < 1900) return 'Tahunnya kejauhan nih. Coba cek lagi ya.';
+  if(dt.getTime() > Date.UTC(t.getFullYear()-5,t.getMonth(),t.getDate())) return 'Hmm, usianya kayaknya belum pas. Cek lagi tanggal lahirnya ya.';
+  return '';
+}
+function setErr(input, errEl, msg){
+  errEl.textContent = msg;
+  if(msg) input.setAttribute('aria-invalid','true'); else input.removeAttribute('aria-invalid');
+}
+
+function submitProfile(){
+  if(busy) return;
+  var nm = $('#nama'), lh = $('#lahir');
+  var e1 = validateName(nm.value), e2 = validateDate(lh.value);
+  setErr(nm, $('#err-nama'), e1);
+  setErr(lh, $('#err-lahir'), e2);
+  if(e1 || e2){
+    mood('worried','Ada yang belum pas, cek lagi ya.');
+    (e1 ? nm : lh).focus();
+    return;
+  }
+  state.nama = nm.value.trim().replace(/\s+/g,' ');
+  state.lahir = lh.value;
+  state.qi = 0;
+  go('q', 1, function(){ renderQuestion(0); });
+}
+/* Tidak memakai event submit: di pratinjau/iframe sandbox submit form diblokir diam-diam. */
+$('#form-profile').addEventListener('submit', function(e){ e.preventDefault(); });
+$('#p-next').addEventListener('click', submitProfile);
+['#nama','#lahir'].forEach(function(sel){
+  $(sel).addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); submitProfile(); } });
+});
+$('#nama').addEventListener('input', function(){ if(this.hasAttribute('aria-invalid')) setErr(this,$('#err-nama'),''); });
+$('#lahir').addEventListener('input', function(){ if(this.hasAttribute('aria-invalid')) setErr(this,$('#err-lahir'),''); });
+$('#p-back').addEventListener('click', function(){
+  if(busy) return;
+  go('welcome', -1, function(){ mood('happy','Halo lagi! Siap mulai?'); });
+});
+$('#btn-start').addEventListener('click', function(){
+  if(busy) return;
+  go('profile', 1, function(){ mood('neutral','Kenalan dulu ya. Namamu siapa?'); });
+});
+
+/* ====== LAYAR 2: PERTANYAAN ====== */
+var choicesEl = $('#choices'), alasanEl = $('#alasan'), errQ = $('#err-q');
+
+function renderQuestion(i){
+  var q = DATA.questions[i], sc = DATA.scales[q.scale], a = state.answers[i];
+  $('#q-eyebrow').textContent = 'Section 2 · Survei · Pertanyaan '+(i+1)+'/'+TOTAL;
+  $('#q-scale').textContent = sc.label;
+  var h = $('#h-q'); h.textContent = '';
+  var sr = document.createElement('span'); sr.className='sr-only'; sr.textContent = 'Pertanyaan '+(i+1)+' dari '+TOTAL+'. ';
+  h.appendChild(sr); h.appendChild(document.createTextNode(q.text));
+
+  choicesEl.textContent = '';
+  sc.options.forEach(function(label, k){
+    var v = k+1;
+    var lb = document.createElement('label'); lb.className='choice'; lb.setAttribute('data-i', v);
+    var inp = document.createElement('input'); inp.type='radio'; inp.name='jawaban'; inp.value=v;
+    if(a.idx === v) inp.checked = true;
+    var card = document.createElement('span'); card.className='card';
+    var bd = document.createElement('span'); bd.className='badge'; bd.setAttribute('aria-hidden','true'); bd.textContent=v;
+    var tx = document.createElement('span'); tx.className='ctext'; tx.textContent=label;
+    var tk = document.createElement('span'); tk.className='tick'; tk.setAttribute('aria-hidden','true');
+    card.appendChild(bd); card.appendChild(tx); card.appendChild(tk);
+    lb.appendChild(inp); lb.appendChild(card);
+    choicesEl.appendChild(lb);
+  });
+  errQ.textContent = ''; choicesEl.removeAttribute('aria-invalid');
+  alasanEl.value = a.reason; updateCounter();
+
+  var last = (i === TOTAL-1);
+  var nx = $('#q-next'); nx.textContent = last ? 'Kirim jawaban' : 'Lanjut';
+  nx.disabled = false; $('#q-back').disabled = false; $('#q-skip').disabled = false;
+
+  if(a.idx) mood(MOODS[a.idx], REACT[a.idx]);
+  else mood('neutral', IDLE[i % IDLE.length]);
+}
+
+function updateCounter(){
+  var n = alasanEl.value.length, c = $('#alasan-count');
+  c.textContent = n+'/'+REASON_MAX;
+  c.classList.toggle('warn', n >= REASON_MAX-30);
+}
+alasanEl.addEventListener('input', function(){
+  updateCounter();
+  state.answers[state.qi].reason = alasanEl.value;
+});
+
+choicesEl.addEventListener('change', function(e){
+  if(e.target.name !== 'jawaban') return;
+  var v = +e.target.value;
+  state.answers[state.qi].idx = v;
+  state.answers[state.qi].label = DATA.scales[DATA.questions[state.qi].scale].options[v-1];
+  errQ.textContent = ''; choicesEl.removeAttribute('aria-invalid');
+  mood(MOODS[v], REACT[v]);
+});
+
+function saveReason(){ state.answers[state.qi].reason = alasanEl.value.trim(); }
+
+function advance(skip){
+  if(busy || state.sending) return;
+  var a = state.answers[state.qi];
+  if(!a.idx){
+    errQ.textContent = 'Pilih salah satu jawaban dulu ya, baru bisa lanjut.';
+    choicesEl.setAttribute('aria-invalid','true');
+    mood('worried','Pilih satu dulu ya…');
+    if(!mq.matches){ choicesEl.classList.remove('shake'); void choicesEl.offsetWidth; choicesEl.classList.add('shake'); }
+    var first = choicesEl.querySelector('input'); if(first) first.focus();
+    return;
+  }
+  if(skip) alasanEl.value = '';
+  saveReason();
+  if(state.qi < TOTAL-1){
+    state.qi++;
+    go('q', 1, function(){ renderQuestion(state.qi); });
+  } else {
+    $('#q-next').disabled = true; $('#q-back').disabled = true; $('#q-skip').disabled = true;
+    go('send', 1, function(){ sendUI('loading'); });
+    submit();
+  }
+}
+$('#form-q').addEventListener('submit', function(e){ e.preventDefault(); });
+$('#q-next').addEventListener('click', function(){ advance(false); });
+$('#q-skip').addEventListener('click', function(){ advance(true); });
+$('#q-back').addEventListener('click', function(){
+  if(busy || state.sending) return;
+  saveReason();
+  if(state.qi > 0){ state.qi--; go('q', -1, function(){ renderQuestion(state.qi); }); }
+  else { go('profile', -1, function(){ mood('neutral','Mau ubah data dirimu?'); }); }
+});
+
+/* pintasan keyboard: tekan 1–5 untuk memilih jawaban */
+document.addEventListener('keydown', function(e){
+  if(current!=='q' || busy || e.ctrlKey || e.metaKey || e.altKey) return;
+  var t = e.target, tag = t && t.tagName;
+  if(tag==='TEXTAREA' || (tag==='INPUT' && t.type!=='radio')) return;
+  if(e.key>='1' && e.key<='5'){
+    var r = choicesEl.querySelector('input[value="'+e.key+'"]');
+    if(r){ r.checked = true; r.dispatchEvent(new Event('change',{bubbles:true})); r.focus(); }
+  }
+});
+
+/* ====== PENGIRIMAN ====== */
+function buildPayload(){
+  var p = { nama: state.nama, tanggal_lahir: state.lahir };
+  DATA.questions.forEach(function(q,i){
+    var a = state.answers[i], n = i+1;
+    p['q'+n+'_pertanyaan'] = q.text;
+    p['q'+n+'_jawaban']    = a.label;
+    p['q'+n+'_alasan']     = (a.reason || '').trim();
+  });
+  p._gotcha = $('#gotcha').value;
+  return p;
+}
+
+function sendUI(modeName, msg){
+  var h=$('#h-send'), m=$('#send-msg'), acts=$('#send-actions');
+  if(modeName === 'loading'){
+    $('#send-eyebrow').textContent = 'Mengirim…';
+    h.textContent = 'Lagi ngirim jawabanmu…';
+    m.textContent = 'Tunggu sebentar ya, jangan ditutup dulu.';
+    $('#loader').hidden = false;
+    acts.hidden = true;
+    $('#btn-retry').disabled = true; $('#btn-review').disabled = true;
+    mood('neutral','Kukirim sekarang, tunggu bentar ya!');
+  } else {
+    $('#send-eyebrow').textContent = 'Gagal terkirim';
+    h.textContent = 'Yah, belum berhasil terkirim';
+    m.textContent = msg;
+    $('#loader').hidden = true;
+    acts.hidden = false;
+    $('#btn-retry').disabled = false; $('#btn-review').disabled = false;
+    mood('sad','Waduh… coba lagi yuk.');
+    h.focus({preventScroll:true});
+  }
+}
+
+function errorMessage(err){
+  if(err && err.name === 'AbortError') return 'Servernya kelamaan nggak menjawab. Jawabanmu masih aman di halaman ini, coba kirim lagi ya.';
+  if(err && err.status){
+    if(err.status === 429) return 'Kebanyakan percobaan dalam waktu singkat. Tunggu sebentar, lalu coba lagi ya.';
+    if(err.status >= 500) return 'Servernya lagi bermasalah (kode '+err.status+'). Jawabanmu masih aman di halaman ini, coba lagi sebentar lagi ya.';
+    return 'Pengirimannya ditolak server (kode '+err.status+'). Coba lagi, atau cek jawabanmu dulu.';
+  }
+  return 'Koneksinya kayaknya lagi nggak stabil. Jawabanmu masih aman di halaman ini, coba lagi ya.';
+}
+
+function submit(){
+  if(state.sending || state.submitted) return Promise.resolve();
+  state.sending = true;
+  var ctrl = new AbortController();
+  var timer = setTimeout(function(){ ctrl.abort(); }, 20000);
+  return fetch(ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', 'Accept':'application/json' },
+    body: JSON.stringify(buildPayload()),
+    signal: ctrl.signal
+  }).then(function(res){
+    clearTimeout(timer);
+    return res.json().catch(function(){ return null; }).then(function(data){
+      if(res.ok && !(data && (data.errors || data.ok === false))) return;
+      var e = new Error('http'); e.status = res.status; throw e;
+    });
+  }).then(function(){
+    state.sending = false; state.submitted = true;
+    go('thanks', 1, function(){
+      var first = state.nama.split(' ')[0];
+      $('#h-thanks').textContent = 'Makasih banyak, '+first+'!';
+      mood('happy','Yeay, makasih banyak ya!');
+      confetti();
+    });
+  }).catch(function(err){
+    clearTimeout(timer);
+    state.sending = false;
+    var msg = errorMessage(err);
+    (function showErr(){ if(busy) setTimeout(showErr, 60); else sendUI('error', msg); })();   // tunggu transisi layar selesai dulu
+  });
+}
+
+$('#btn-retry').addEventListener('click', function(){
+  if(state.sending) return;
+  this.disabled = true; $('#btn-review').disabled = true;
+  sendUI('loading');
+  submit();
+});
+$('#btn-review').addEventListener('click', function(){
+  if(busy || state.sending) return;
+  state.qi = TOTAL-1;
+  go('q', -1, function(){ renderQuestion(state.qi); });
+});
+
+/* ====== KONFETI ====== */
+function confetti(){
+  if(mq.matches) return;
+  var box = document.createElement('div'); box.className='confetti'; box.setAttribute('aria-hidden','true');
+  var cols = ['#4de3ff','#a98bff','#ff7ad9','#5dffb0','#ffd24d'];
+  for(var i=0;i<34;i++){
+    var s = document.createElement('i');
+    s.style.left = (Math.random()*100)+'%';
+    s.style.background = cols[i%cols.length];
+    s.style.animationDuration = (2.4+Math.random()*2.2)+'s';
+    s.style.animationDelay = (Math.random()*1.2)+'s';
+    s.style.transform = 'rotate('+(Math.random()*360)+'deg)';
+    box.appendChild(s);
+  }
+  $('#frame').appendChild(box);
+  setTimeout(function(){ if(box.parentNode) box.parentNode.removeChild(box); }, 6500);
+}
+
+/* cegah hilang jawaban kalau halaman tak sengaja ditutup/refresh */
+window.addEventListener('beforeunload', function(e){
+  if(current!=='welcome' && !state.submitted){ e.preventDefault(); e.returnValue=''; }
+});
+
+updateProgress();
+})();
+</script>
+</body>
+</html>
